@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" type="text/css" href="Interview.css">
+		<title>
+			Joel Howell Interview Project
+		</title>
+	</head>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://www.gstatic.com/charts/loader.js"></script>
+	<script>
+    var url = 'https://run.mocky.io/v3/a2cc3707-8691-4188-8413-6183a7bb3d32';
+    var data;
+
+    async function GetJson(url = '') {
+      const response = await fetch(url, {method: 'POST', body: JSON.stringify(data)});
+      return response.json();
+    }
+
+    function addComma(x) {
+    var parts = x.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return parts.join(".");
+}
+
+    GetJson(url)
+        .then(data => {
+        //Header
+        document.getElementById("region").innerHTML = data.region.title;
+        document.getElementById("occupation1").innerHTML = data.occupation.title;
+        document.getElementById("occupation2").innerHTML = data.occupation.title;
+
+        //Summary
+        document.getElementById("jobs_year").innerHTML = data.summary.jobs.year;
+        document.getElementById("jobs_regional").innerHTML = addComma(data.summary.jobs.regional);
+        document.getElementById("jobs_percent_over").innerHTML = Math.round(100*(data.summary.jobs.regional/data.summary.jobs.national_avg));
+
+        document.getElementById("jobs_growth").innerHTML = "+" + data.summary.jobs_growth.regional + "%";
+        document.getElementById("jobs_growth_start_year").innerHTML = data.summary.jobs_growth.start_year;
+        document.getElementById("jobs_growth_end_year").innerHTML = data.summary.jobs_growth.end_year;
+        document.getElementById("jobs_growth_nation").innerHTML = "+" + data.summary.jobs_growth.national_avg + "%";
+
+        document.getElementById("jobs_regional_hourly").innerHTML = "$" + data.summary.earnings.regional + "/hr";
+        document.getElementById("jobs_national_hourly").innerHTML = "Nation: $" + data.summary.earnings.national_avg + "/hr";
+
+		//Change Table
+
+		document.getElementById("Table_start_year").innerHTML = data.trend_comparison.start_year + " Jobs";
+		document.getElementById("Table_end_year").innerHTML = data.trend_comparison.end_year + " Jobs";
+
+		document.getElementById("region_start").innerHTML = addComma(data.trend_comparison.regional[0]);
+		document.getElementById("region_end").innerHTML = addComma(data.trend_comparison.regional[5]);
+		document.getElementById("region_change").innerHTML = addComma(data.trend_comparison.regional[5]-data.trend_comparison.regional[0]);
+		document.getElementById("region_change_percent").innerHTML = Math.round( (100*((data.trend_comparison.regional[5]-data.trend_comparison.regional[0])/data.trend_comparison.regional[0])) * 10)/10 + "%";
+
+		document.getElementById("state_start").innerHTML = addComma(data.trend_comparison.state[0]);
+		document.getElementById("state_end").innerHTML = addComma(data.trend_comparison.state[5]);
+		document.getElementById("state_change").innerHTML = addComma(data.trend_comparison.state[5]-data.trend_comparison.state[0]);
+		document.getElementById("state_change_percent").innerHTML = Math.round( (100*((data.trend_comparison.state[5]-data.trend_comparison.state[0])/data.trend_comparison.state[0])) * 10)/10 + "%";
+
+		document.getElementById("nation_start").innerHTML = addComma(data.trend_comparison.nation[0]);
+		document.getElementById("nation_end").innerHTML = addComma(data.trend_comparison.nation[4]);
+		document.getElementById("nation_change").innerHTML = addComma(data.trend_comparison.nation[4]-data.trend_comparison.nation[0]);
+		document.getElementById("nation_change_percent").innerHTML = Math.round( (100*((data.trend_comparison.nation[4]-data.trend_comparison.nation[0])/data.trend_comparison.nation[0])) * 10)/10 + "%";
+
+		//Industry Table
+
+		var industryJobs = data.employing_industries.jobs;
+
+		document.getElementById("industry_title").innerHTML = "Industries Employing " + data.occupation.title;
+
+		document.getElementById("Occ_jobs").innerHTML = "Occupation Jobs in Industry (" + data.employing_industries.year + ")";
+		document.getElementById("P_Occ_Jobs").innerHTML = "% of Occupation in Industry (" + data.employing_industries.year + ")";
+		document.getElementById("total_jobs").innerHTML = "% of Total Jobs in Industry (" + data.employing_industries.year + ")";
+
+		document.getElementById("table00").innerHTML = data.employing_industries.industries[0].title;
+		document.getElementById("table01").innerHTML = addComma(data.employing_industries.industries[0].in_occupation_jobs);
+		document.getElementById("table02").innerHTML = Math.round( (data.employing_industries.industries[0].in_occupation_jobs/industryJobs) *1000)/10 + "%";
+		document.getElementById("table03").innerHTML = Math.round( (data.employing_industries.industries[0].in_occupation_jobs/data.employing_industries.industries[0].jobs) *1000)/10 + "%"
+
+		document.getElementById("table10").innerHTML = data.employing_industries.industries[1].title;
+		document.getElementById("table11").innerHTML = addComma(data.employing_industries.industries[1].in_occupation_jobs);
+		document.getElementById("table12").innerHTML = Math.round( (data.employing_industries.industries[1].in_occupation_jobs/industryJobs) *1000)/10 + "%";
+		document.getElementById("table13").innerHTML = Math.round( (data.employing_industries.industries[1].in_occupation_jobs/data.employing_industries.industries[1].jobs) *1000)/10 + "%"
+
+		document.getElementById("table20").innerHTML = data.employing_industries.industries[2].title;
+		document.getElementById("table21").innerHTML = addComma(data.employing_industries.industries[2].in_occupation_jobs);
+		document.getElementById("table22").innerHTML = Math.round( (data.employing_industries.industries[2].in_occupation_jobs/industryJobs) *1000)/10 + "%";
+		document.getElementById("table23").innerHTML = Math.round( (data.employing_industries.industries[2].in_occupation_jobs/data.employing_industries.industries[2].jobs) *1000)/10 + "%"
+
+		document.getElementById("table30").innerHTML = data.employing_industries.industries[3].title;
+		document.getElementById("table31").innerHTML = addComma(data.employing_industries.industries[3].in_occupation_jobs);
+		document.getElementById("table32").innerHTML = Math.round( (data.employing_industries.industries[3].in_occupation_jobs/industryJobs) *1000)/10 + "%";
+		document.getElementById("table33").innerHTML = Math.round( (data.employing_industries.industries[3].in_occupation_jobs/data.employing_industries.industries[3].jobs) *1000)/10 + "%"
+
+		document.getElementById("table40").innerHTML = data.employing_industries.industries[4].title;
+		document.getElementById("table41").innerHTML = addComma(data.employing_industries.industries[4].in_occupation_jobs);
+		document.getElementById("table42").innerHTML = Math.round( (data.employing_industries.industries[4].in_occupation_jobs/industryJobs) *1000)/10 + "%";
+		document.getElementById("table43").innerHTML = Math.round( (data.employing_industries.industries[4].in_occupation_jobs/data.employing_industries.industries[4].jobs) *1000)/10 + "%"
+
+        //Line chart
+		google.charts.load('current', {'packages':['corechart']});
+      	google.charts.setOnLoadCallback(drawChart);
+
+     	function drawChart() {
+
+			var values = new google.visualization.DataTable();
+		 	values.addColumn('string', 'Year');
+		 	values.addColumn('number', 'Region');
+		 	values.addColumn('number', 'State');
+		 	values.addColumn('number', 'Nation');
+
+			values.addRows(data.trend_comparison.end_year-data.trend_comparison.start_year);
+
+			var year = data.trend_comparison.start_year;
+
+		 	for(var i=0; i<(data.trend_comparison.end_year-data.trend_comparison.start_year); i++){
+		 		values.setCell(i, 0, year+"");
+		 		values.setCell(i, 1, 100*(data.trend_comparison.regional[i]-data.trend_comparison.regional[0])/data.trend_comparison.regional[0]);
+		 		values.setCell(i, 2, 100*(data.trend_comparison.state[i]-data.trend_comparison.state[0])/data.trend_comparison.state[0]);
+		 		values.setCell(i, 3, 100*(data.trend_comparison.nation[i]-data.trend_comparison.nation[0])/data.trend_comparison.nation[0]);
+
+		 		year++;
+		 	}
+
+			var options = {
+			  legend: { position: 'bottom' },
+			  vAxis: {title: 'Percent Change'},
+			  colors: ['#142850', '#1185c4', '#abdafc']
+			};
+
+			var chart = new google.visualization.LineChart(document.getElementById('line_chart'));
+
+			chart.draw(values, options);
+		}
+
+		drawChart();
+
+        });
+	</script>
+	
+	<body>
+			<div class = "row">
+				<div class = "col-12 col-m-12" id = "Header">
+					<h1>Occupation Overview</h1>
+					<br>
+					<div id="occupation1" class = "content"></div> in <div id="region" class = "content"></div>
+				</div>
+			</div>
+<!Next row------------------------------------------------------------------------------------------------------------------------>
+			<div class = "row">
+				<div class = "col-12 col-m-12">
+					<b>Occupation Summary for </b> <div id="occupation2" class = "content" style = "font-weight:bold"></div>
+				</div>
+			</div>
+<!Next row------------------------------------------------------------------------------------------------------------------------>
+			<!Summary------------------------------------->
+			<div class = "row">
+				<div class = "col-4 col-m-4 summary" style = "border-left-style: none; border-right-width:2px;">
+					<br>
+					<div id="jobs_regional" style = "font-size: xxx-large;"></div>
+					<b>Jobs</b>(<div id="jobs_year" class = "content"></div>)
+					<br>
+					<div id="jobs_percent_over" class = "content"></div>% <p style = "color: #3cae20"> above</p> National average
+				</div>
+				<!Change------------------------------------->
+				<div class = "col-4 col-m-4 summary ">
+					<br>
+						<div id="jobs_growth" style="color: #3cae20;font-size:xxx-large;border-right-width:2px;border-left-width:2px;"></div>
+					<b>%Change</b>(<div id="jobs_growth_start_year" class = "content"></div>-<div id="jobs_growth_end_year" class = "content"></div>)
+					<br>
+					Nation:<div class = "content" id = "jobs_growth_nation" style="color: #3cae20;"></div>
+				</div>
+				<!Earnings------------------------------------->
+				<div class = "col-4 col-m-4 summary" style = "border-right-style: none; border-left-width:2px;">
+					<br>
+					<div style ="font-size:xxx-large;" id = "jobs_regional_hourly"></div>
+					<b>Median Hourly Earnings</b>
+					<br>
+					<div id = "jobs_national_hourly"></div>
+				</div>
+			</div>
+<!Next row------------------------------------------------------------------------------------------------------------------------>
+			<div class = "row">
+				<br>
+				<b>Regional Trends</b>
+				<hr>
+				<div id = "line_chart" class = "col-12">
+				</div>
+			</div>
+<!Next row------------------------------------------------------------------------------------------------------------------------>
+			<div class = "row" id="table_change" >
+				<table style = "width:100%; text-align: right;">
+					<tr style = "font-weight: bold">
+						<td class = "col-6s" style = "text-align: left; ">Region</td><td class = "col-1s" id="Table_start_year"></td><td class = "col-1s" id = "Table_end_year"></td><td class = "col-1s">Change</td><td class = "col-1">%Change</td>
+					</tr>
+					<tr>
+						<td class = "col-6s" style = "text-align: left; ">Region</td><td class = "col-1s" id="region_start"></td><td class = "col-1s" id = "region_end"></td><td id = "region_change" class = "col-1"></td><td id = "region_change_percent" class = "col-1s"></td>
+					</tr>
+					<tr>
+						<td class = "col-6s" style = "text-align: left; ">State</td><td class = "col-1s" id="state_start"></td><td class = "col-1s" id = "state_end"></td><td id = "state_change" class = "col-1"></td><td id = "state_change_percent" class = "col-1s"></td>
+					</tr>
+					<tr>
+						<td class = "col-6s" style = "text-align: left; ">Nation</td><td class = "col-1s" id="nation_start"></td><td class = "col-1s" id = "nation_end"></td><td id = "nation_change" class = "col-1"></td><td id = "nation_change_percent" class = "col-1s"></td>
+					</tr>
+				</table>
+			</div>
+<!Next row------------------------------------------------------------------------------------------------------------------------>
+		<div class = "row">
+			<p id="margin"></p>
+			<div id = "industry_title" style="font-weight: bold; vertical-align:bottom;"></div>
+			<hr>
+			<div style = "font-weight: bold;">
+				<div class = "col-7s" style = "text-align: left">Industry</div><div id = "Occ_jobs" class = "col-1s right"></div><div id = "P_Occ_Jobs" class = "col-1s right"></div><div id = "total_jobs" class = "col-1s right"></div>
+			</div>
+			<table style = "width: 100%; text-align: right;">
+				<tr>
+					<td style = "text-align: left; vertical-align: middle;" class = "col-7s Btop color" id="table00"></td><td class = "col-1s Btop" id="table01"></td><td class = "col-1s Btop" id="table02"></td><td class = "col-1s Btop" id="table03"></td>
+				</tr>
+				<tr>
+					<td style = "text-align: left;" class = "col-7s color" id="table10"></td> <td class = "col-1s" id="table11"></td><td class = "col-1s" id="table12"></td><td class = "col-1s" id="table13"></td>
+				</tr>
+				<tr>
+					<td style = "text-align: left;" class = "col-7s color" id="table20"></td><td class = "col-1s" id="table21"></td><td class = "col-1s" id="table22"></td><td class = "col-1s" id="table23"></td>
+				</tr>
+				<tr>
+					<td style = "text-align: left;" class = "col-7s color" id="table30"></td><td class = "col-1s" id="table31"></td><td class = "col-1s" id="table32"></td><td class = "col-1s" id="table33"></td>
+				</tr>
+				<tr>
+					<td style = "text-align: left;" class = "col-7s color" id="table40"></td><td class = "col-1s" id="table41"></td><td class = "col-1s" id="table42"></td><td class = "col-1s" id="table43"></td>
+				</tr>
+			</table>
+		</div>
+	</body>
+</html>
